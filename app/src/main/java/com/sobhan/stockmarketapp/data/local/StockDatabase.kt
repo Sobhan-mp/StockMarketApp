@@ -3,8 +3,6 @@ package com.sobhan.stockmarketapp.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
-class StockDatabase {
-
     @Database(
         entities = [CompanyListingEntity::class],
         version = 1
@@ -12,4 +10,3 @@ class StockDatabase {
     abstract class StockDatabase : RoomDatabase() {
         abstract val dao: StockDao
     }
-}
