@@ -1,11 +1,16 @@
 package com.sobhan.stockmarketapp.presentation
 
+import android.app.job.JobScheduler
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobhan.stockmarketapp.domain.Repository.StockRepository
 import com.sobhan.stockmarketapp.util.Resource
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -14,12 +19,25 @@ class CompanyListingViewModel(
     val repository: StockRepository
 ) : ViewModel() {
 
-    val state = mutableStateOf(CompanyListingState())
+    var state by mutableStateOf(CompanyListingState())
+
+    //val job: Job? = null
+
+    init {
+        getCompanyListing()
+    }
 
     fun event(event: CompanyListingEvent) {
         when (event) {
             is CompanyListingEvent.Refresh -> getCompanyListing(fetchFromRemote = true)
-            is CompanyListingEvent.Search -> getCompanyListing(query = event.query)
+            is CompanyListingEvent.Search -> {
+                state = state.copy(query = event.query)
+                viewModelScope.launch {
+                    delay(100)
+                    getCompanyListing(query = event.query)
+                }
+
+            }
         }
     }
 
@@ -35,9 +53,9 @@ class CompanyListingViewModel(
                 ).collect { result ->
                     when (result) {
                         is Resource.Error -> Unit// do something
-                        is Resource.Loading -> state.value = state.value.copy(isLoading = true)
+                        is Resource.Loading -> state = state.copy(isLoading = true)
                         is Resource.Success -> result.data?.let {
-                            state.value = state.value.copy(company = it)
+                            state = state.copy(company = it)
                         }
                     }
                 }
