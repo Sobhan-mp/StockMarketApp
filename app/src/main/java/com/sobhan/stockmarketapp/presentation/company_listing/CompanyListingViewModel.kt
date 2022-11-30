@@ -1,7 +1,5 @@
-package com.sobhan.stockmarketapp.presentation
+package com.sobhan.stockmarketapp.presentation.company_listing
 
-import android.app.job.JobScheduler
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,10 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobhan.stockmarketapp.domain.Repository.StockRepository
 import com.sobhan.stockmarketapp.util.Resource
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CompanyListingViewModel(
@@ -27,7 +22,7 @@ class CompanyListingViewModel(
         getCompanyListing()
     }
 
-    fun event(event: CompanyListingEvent) {
+    fun onEvent(event: CompanyListingEvent) {
         when (event) {
             is CompanyListingEvent.Refresh -> getCompanyListing(fetchFromRemote = true)
             is CompanyListingEvent.Search -> {

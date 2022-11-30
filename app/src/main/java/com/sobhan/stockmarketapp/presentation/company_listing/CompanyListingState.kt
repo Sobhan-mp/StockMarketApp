@@ -1,4 +1,4 @@
-package com.sobhan.stockmarketapp.presentation
+package com.sobhan.stockmarketapp.presentation.company_listing
 
 import com.sobhan.stockmarketapp.domain.model.CompanyListing
 

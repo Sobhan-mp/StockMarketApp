@@ -1,4 +1,4 @@
-package com.sobhan.stockmarketapp.presentation
+package com.sobhan.stockmarketapp.presentation.company_listing
 
 sealed class CompanyListingEvent(){
     object Refresh: CompanyListingEvent()
